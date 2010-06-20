@@ -2000,11 +2000,13 @@ int query_DXT_capability( void )
 				CFRelease( extensionName );
 				CFRelease( bundle );
 			#else
+#ifndef __PALMPDK__
 				ext_addr = (P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC)
 						glXGetProcAddressARB
 						(
 							(const GLubyte *)"glCompressedTexImage2DARB"
 						);
+#endif /* __PALMPDK__ */
 			#endif
 			/*	Flag it so no checks needed later	*/
 			if( NULL == ext_addr )

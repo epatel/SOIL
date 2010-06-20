@@ -1,0 +1,61 @@
+# SOIL makefile for Palm PDK (based on the Linux makefile)
+# Type 'make -f makefile-pdk-device' to build the SOIL lib
+# Type 'make -f makefile-pdk-device install' to install SOIL into PalmPDK
+
+PalmPDK = /opt/PalmPDK
+
+LOCAL_LIB = $(PalmPDK)/device
+LOCAL_INC = $(PalmPDK)
+
+LIB = libSOIL-device.a
+LIB_INSTALL = libSOIL.a
+INC = SOIL.h
+
+SRCDIR = ../../src
+LIBDIR = ../../lib
+INCDIR = ../../src
+
+CXX = $(PalmPDK)/arm-gcc/bin/arm-none-linux-gnueabi-gcc
+AR = $(PalmPDK)/arm-gcc/bin/arm-none-linux-gnueabi-ar
+RANLIB = $(PalmPDK)/arm-gcc/bin/arm-none-linux-gnueabi-ranlib
+CXXFLAGS = -mcpu=arm1136jf-s -mfpu=vfp -mfloat-abi=softfp --sysroot=/opt/PalmPDK/arm-gcc/sysroot -I/opt/PalmPDK/include -I/opt/PalmPDK/include/SDL -D__PALMPDK__
+DELETER = rm -f
+COPIER = cp
+
+SRCNAMES = \
+  image_helper.c \
+  stb_image_aug.c  \
+  image_DXT.c \
+  SOIL.c 
+
+OBJ = $(SRCNAMES:.c=-device.o)
+BIN = $(LIBDIR)/$(LIB)
+
+all: $(BIN)
+
+$(BIN): $(OBJ)
+	$(AR) r $(BIN) $(OBJ)
+	$(RANLIB) $(BIN)
+	@echo -------------------------------------------------------------------------
+	@echo 'Done. Type "make -f makefile-pdk-device install" to install the library.'
+
+%-device.o: $(SRCDIR)/%.c
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+clean:
+	$(DELETER) $(OBJ) $(BIN)
+
+install: $(BIN)
+	@echo Installing to: $(LOCAL_LIB)/lib and $(LOCAL_INC)/include...
+	@echo -------------------------------------------------------------------
+	$(COPIER) $(BIN) $(LOCAL_LIB)/lib/$(LIB_INSTALL)
+	$(COPIER) $(INCDIR)/$(INC) $(LOCAL_INC)/include
+	@echo -------------------------------------------------------------------
+	@echo SOIL library installed. Enjoy!
+
+uninstall:
+	$(DELETER) $(LOCAL_INC)/include/$(INC) $(LOCAL_LIB)/lib/$(LIB_INSTALL)
+	@echo -------------------------------------------------------------------
+	@echo SOIL library uninstalled.
+
+.PHONY: all clean install uninstall

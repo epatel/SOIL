@@ -12,7 +12,6 @@ LIB_INSTALL = libSOIL.a
 INC = SOIL.h
 
 SRCDIR = ../../src
-LIBDIR = ../../lib
 INCDIR = ../../src
 
 CXX = $(PalmPDK)/arm-gcc/bin/arm-none-linux-gnueabi-gcc
@@ -29,7 +28,7 @@ SRCNAMES = \
   SOIL.c 
 
 OBJ = $(SRCNAMES:.c=-device.o)
-BIN = $(LIBDIR)/$(LIB)
+BIN = $(LIB)
 
 all: $(BIN)
 

@@ -12,7 +12,6 @@ LIB_INSTALL = libSOIL.a
 INC = SOIL.h
 
 SRCDIR = ../../src
-LIBDIR = ../../lib
 INCDIR = ../../src
 
 CXX = g++
@@ -29,7 +28,7 @@ SRCNAMES = \
   SOIL.c 
 
 OBJ = $(SRCNAMES:.c=-host.o)
-BIN = $(LIBDIR)/$(LIB)
+BIN = $(LIB)
 
 all: $(BIN)
 
